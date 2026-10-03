@@ -9,9 +9,32 @@ from fastapi import FastAPI
 
 from app.routers import notification
 
+from contextlib import asynccontextmanager
+
+import py_eureka_client.eureka_client as eureka_client
+
+# TODO (students): if you add other routers, include them here.
+
+EUREKA_SERVER = os.getenv("EUREKA_SERVER", "http://localhost:8761/eureka")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await eureka_client.init_async(
+        eureka_server=EUREKA_SERVER,
+        app_name="NOTIFICATION",
+        instance_host="localhost",
+        instance_port=PORT,
+    )
+    yield
+    await eureka_client.stop_async()
+
+
 PORT = int(os.getenv("PORT", "8084"))
 
+
 app = FastAPI(
+    lifespan=lifespan,
     title="Notification Microservice API",
     version="1.0.0",
     description=(
@@ -28,7 +51,6 @@ app = FastAPI(
 
 app.include_router(notification.router)
 
-# TODO (students): if you add other routers, include them here.
 
 
 if __name__ == "__main__":

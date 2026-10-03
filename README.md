@@ -133,3 +133,43 @@ Démarrez d’abord le serveur Eureka avant d’exécuter les microservices clie
 
 Ce workshop a été développé dans le cadre du module **Applications Web Distribuées**,  
 à l’**École d’Ingénieurs ESPRIT**.
+
+## ✅ Rendu 
+---
+
+## 👥 Équipe
+
+- Hamdi Safa
+- Messaoui Malak
+- Ouertani Sara
+- Ouertatani Aziz
+- Dridi Houssem
+
+## ✅ Résultat : dashboard Eureka
+
+Les 4 services sont enregistrés en même temps, avec 2 instances de MEETING et de NOTIFICATION.
+
+![Dashboard Eureka](docs/eureka-dashboard-rendu.png)
+
+| Service | Instances | Ports |
+|---|---|---|
+| CANDIDAT | 2 | 8081, 8091 |
+| JOB | 1 | 8082 |
+| MEETING | 2 | 8083, 8093 |
+| NOTIFICATION | 2 | 8084, 8094 |
+
+## ▶️ Lancer une 2ᵉ instance
+
+```powershell
+# Meeting (Node.js)
+$env:PORT=8093; npm start
+
+# Notification (FastAPI), le port doit être identique pour PORT et uvicorn
+$env:PORT=8094; python -m uvicorn app.main:app --port 8094
+```
+
+## 🔎 Vérification
+
+- http://localhost:8761 : dashboard Eureka
+- http://localhost:8083/api/meetings/hello
+- http://localhost:8084/api/notifications/hello
